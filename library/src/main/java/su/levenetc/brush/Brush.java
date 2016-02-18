@@ -2,6 +2,7 @@ package su.levenetc.brush;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.RectF;
 
 /**
  * Created by eleven on 10/11/2015.
@@ -15,11 +16,11 @@ public class Brush {
 	private float rotation;
 	private float velocity;
 	private float angle;
-
+	RectF dirtyRect = new RectF();
 
 	public Brush(Context context) {
-		makeBrushA(context);
-//		makeBrushB(context);
+//		makeBrushA(context);
+		makeBrushB(context);
 	}
 
 	private void makeBrushB(Context context) {
@@ -66,17 +67,30 @@ public class Brush {
 
 	public void onDraw(Canvas canvas) {
 
-
+		dirtyRect.set(0, 0, 0, 0);
 		for (Plot plot : plots) {
-			canvas.save();
 			plot.onDraw(canvas, pressure, x, y, angle, velocity);
-			canvas.restore();
+			dirtyRect.union(plot.dirtyRect);
 		}
+
+		configDirtyRegion(canvas);
 
 		if (Debug.ENABLED) {
-			canvas.drawLine(x, y, x, y - 100 * velocity, Debug.GREEN_STROKE);
+			//canvas.drawLine(x, y, x, y - 100 * velocity, Debug.GREEN_STROKE);
 		}
 
+	}
+
+	private void configDirtyRegion(Canvas canvas) {
+		if (Config.USE_DIRTY) {
+			dirtyRect.union(
+					dirtyRect.left - 50,
+					dirtyRect.top - 50,
+					dirtyRect.right + 50,
+					dirtyRect.bottom + 50
+			);
+			canvas.drawRect(dirtyRect, Debug.GREEN_STROKE);
+		}
 	}
 
 	public void setX(float x) {

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -48,14 +49,27 @@ public class BrushCanvas extends View {
 		});
 	}
 
+	private Rect dirtyRect = new Rect(0, 0, 0, 0);
+
 	@Override protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
 		if (brushController.isStarted()) {
 			brushController.update();
 			brush.onDraw(bufferCanvas);
-			canvas.drawBitmap(bufferBitmap, 0, 0, paint);
-//			postInvalidateDelayed(1000 / 60);
+
+			if (Config.USE_DIRTY) {
+				dirtyRect.set(
+						(int) brush.dirtyRect.left,
+						(int) brush.dirtyRect.right,
+						(int) brush.dirtyRect.top,
+						(int) brush.dirtyRect.bottom
+				);
+				canvas.drawBitmap(bufferBitmap, dirtyRect, brush.dirtyRect, paint);
+			} else {
+				canvas.drawBitmap(bufferBitmap, 0, 0, paint);
+			}
+
 		} else {
 			if (bufferBitmap != null) canvas.drawBitmap(bufferBitmap, 0, 0, paint);
 		}

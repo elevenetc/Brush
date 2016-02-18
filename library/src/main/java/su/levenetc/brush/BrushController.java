@@ -27,7 +27,7 @@ public class BrushController {
 	private float segment;
 	private AverageValueFilter velocityAvgFilter = new AverageValueFilter(100, false);
 	private double angle;
-	private int duration = 5000;
+	private int duration = 1000;
 
 	public BrushController(Brush brush) {
 		this.brush = brush;
@@ -75,7 +75,7 @@ public class BrushController {
 
 		p.moveTo(centerX, centerY);
 
-		for (int i = 0; i < 600; i++) {
+		for (int i = 0; i < 1000; i++) {
 			float x = i / 100f;
 			float y = (float) Math.sin(x);
 			p.rLineTo(x / 4, y);
@@ -112,15 +112,15 @@ public class BrushController {
 		animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 			@Override public void onAnimationUpdate(ValueAnimator animation) {
 				step = (int) animation.getAnimatedValue();
-				if (updateStep()) brushCanvas.invalidate();
 
+				if (updateStep()) brushCanvas.invalidate();
 			}
 		});
 		animator.start();
 	}
 
 	private float computePressure() {
-		double segments = SEGMENTS_AMOUNT / 3;
+		double segments = SEGMENTS_AMOUNT;
 		double s = (step / segments) * (Math.PI * 2);
 		return (float) (Math.cos(s + Math.PI) + 1) / 2f;
 	}
