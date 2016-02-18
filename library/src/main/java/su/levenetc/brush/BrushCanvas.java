@@ -14,11 +14,13 @@ import android.view.ViewTreeObserver;
  */
 public class BrushCanvas extends View {
 
-	private Brush brush = new Brush(getContext());
-	BrushController brushController = new BrushController(brush);
+//	private Brush brush = new LargeBrush(getContext());
+	private Brush brush = new TinyBrush(getContext());
+	private BrushController brushController = new BrushController(brush);
 	private Bitmap bufferBitmap;
 	private Canvas bufferCanvas;
 	private Paint paint = new Paint();
+	private Rect dirtyRect = new Rect(0, 0, 0, 0);
 
 	public BrushCanvas(Context context) {
 		super(context);
@@ -48,8 +50,6 @@ public class BrushCanvas extends View {
 			}
 		});
 	}
-
-	private Rect dirtyRect = new Rect(0, 0, 0, 0);
 
 	@Override protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);

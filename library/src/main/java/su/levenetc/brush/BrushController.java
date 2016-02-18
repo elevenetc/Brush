@@ -28,6 +28,7 @@ public class BrushController {
 	private AverageValueFilter velocityAvgFilter = new AverageValueFilter(100, false);
 	private double angle;
 	private int duration = 1000;
+	private RectF oval = new RectF();
 
 	public BrushController(Brush brush) {
 		this.brush = brush;
@@ -41,7 +42,7 @@ public class BrushController {
 		return isStarted;
 	}
 
-	private RectF oval = new RectF();
+
 
 	public void start(Context context) {
 

@@ -6,33 +6,51 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 
 /**
- * Created by eleven on 10/11/2015.
+ * Created by Eugene Levenetc on 19/02/2016.
  */
-public class Plot {
+public abstract class Plot {
 
-	private final Paint paint = new Paint();
-	private final float dx;
-	private final float dy;
-	private final float radius;
-	private final float sizeFactor;
-	private float prevX;
-	private float prevY;
+	protected Paint paint = new Paint();
+	protected final float dx;
+	protected final float dy;
+	protected final float baseRadius;
+	protected final float sizeFactor;
+	protected float prevX;
+	protected float prevY;
+	protected float alphaFactor = 1;
 	public RectF dirtyRect = new RectF();
 
-	public Plot(float sizeFactor, float dx, float dy, float radius) {
+	public Plot(float sizeFactor, float dx, float dy, float baseRadius) {
 		this.dx = dx;
 		this.dy = dy;
-		this.radius = radius;
+		this.baseRadius = baseRadius;
 		this.sizeFactor = sizeFactor;
+
 		paint.setStyle(Paint.Style.STROKE);
 		paint.setColor(Color.RED);
 		paint.setAntiAlias(true);
-		paint.setStrokeJoin(Paint.Join.BEVEL);
+		paint.setDither(true);
+	}
+
+	public void setColor(int color) {
+		paint.setColor(color);
+	}
+
+	public void setAlphaFactor(float alphaFactor) {
+		this.alphaFactor = alphaFactor;
+	}
+
+	protected void configDirtyRegion(float pointX, float pointY) {
+		dirtyRect.set(
+				Math.min(prevX, pointX),
+				Math.min(prevY, pointY),
+				Math.max(prevX, pointX),
+				Math.max(prevY, pointY)
+		);
 	}
 
 	public void onDraw(Canvas canvas, float pressure, float x, float y, float angle, float velocity) {
-
-		paint.setStrokeWidth(sizeFactor * radius * pressure);
+		paint.setStrokeWidth(sizeFactor * baseRadius * pressure);
 
 		float angleFactor = 2f;
 		float angleDiffX = angleFactor * pressure;
@@ -42,8 +60,9 @@ public class Plot {
 		float pointY = y + dy * angleDiffY;
 
 		if (prevX != 0) {
-			paint.setAlpha((int) (255 * pressure));
-			canvas.drawLine(prevX, prevY, pointX, pointY, paint);
+			drawImplementation(canvas, pressure, pointX, pointY);
+		} else {
+			firstDraw(canvas, pressure, pointX, pointY);
 		}
 
 		configDirtyRegion(pointX, pointY);
@@ -52,12 +71,8 @@ public class Plot {
 		prevY = pointY;
 	}
 
-	private void configDirtyRegion(float pointX, float pointY) {
-		dirtyRect.set(
-				Math.min(prevX, pointX),
-				Math.min(prevY, pointY),
-				Math.max(prevX, pointX),
-				Math.max(prevY, pointY)
-		);
-	}
+	protected abstract void drawImplementation(Canvas canvas, float pressure, float pointX, float pointY);
+
+	protected abstract void firstDraw(Canvas canvas, float pressure, float pointX, float pointY);
+
 }
