@@ -18,6 +18,7 @@ public abstract class Plot {
 	protected float prevX;
 	protected float prevY;
 	protected float alphaFactor = 1;
+	protected float angleFactor = 2;
 	public RectF dirtyRect = new RectF();
 
 	public Plot(float sizeFactor, float dx, float dy, float baseRadius) {
@@ -49,15 +50,30 @@ public abstract class Plot {
 		);
 	}
 
-	public void onDraw(Canvas canvas, float pressure, float x, float y, float angle, float velocity) {
+	protected void handleSize(float pressure) {
 		paint.setStrokeWidth(sizeFactor * baseRadius * pressure);
+	}
 
-		float angleFactor = 2f;
-		float angleDiffX = angleFactor * pressure;
+	protected float distortY(float y, float pressure) {
 		float angleDiffY = angleFactor * pressure;
+		return y + dy * angleDiffY;
+	}
 
-		float pointX = x + dx * angleDiffX;
-		float pointY = y + dy * angleDiffY;
+	protected float distortX(float x, float pressure) {
+		float angleDiffX = angleFactor * pressure;
+		return x + dx * angleDiffX;
+	}
+
+	protected void handleAlpha(float pressure){
+		paint.setAlpha((int) (255 * pressure * alphaFactor));
+	}
+
+	public void onDraw(Canvas canvas, float pressure, float x, float y, float angle, float velocity) {
+		handleAlpha(pressure);
+		handleSize(pressure);
+
+		float pointX = distortX(x, pressure);
+		float pointY = distortY(y, pressure);
 
 		if (prevX != 0) {
 			drawImplementation(canvas, pressure, pointX, pointY);

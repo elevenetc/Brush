@@ -16,7 +16,6 @@ public class LinePlot extends Plot {
 	}
 
 	@Override protected void drawImplementation(Canvas canvas, float pressure, float pointX, float pointY) {
-		paint.setAlpha((int) (255 * pressure * alphaFactor));
 		canvas.drawLine(prevX, prevY, pointX, pointY, paint);
 	}
 

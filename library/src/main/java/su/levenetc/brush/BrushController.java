@@ -27,7 +27,7 @@ public class BrushController {
 	private float segment;
 	private AverageValueFilter velocityAvgFilter = new AverageValueFilter(100, false);
 	private double angle;
-	private int duration = 1000;
+	private int duration = 2000;
 	private RectF oval = new RectF();
 
 	public BrushController(Brush brush) {

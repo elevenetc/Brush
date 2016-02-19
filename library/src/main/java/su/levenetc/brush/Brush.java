@@ -8,7 +8,7 @@ import android.graphics.RectF;
  */
 public abstract class Brush {
 
-	private PathPlot[] plots;
+	private Plot[] plots;
 	private float pressure = 1f;
 	private float x;
 	private float y;
@@ -21,14 +21,14 @@ public abstract class Brush {
 
 	}
 
-	protected void setPlots(PathPlot[] plots) {
+	protected void setPlots(Plot[] plots) {
 		this.plots = plots;
 	}
 
 	public void onDraw(Canvas canvas) {
 
 		dirtyRect.set(0, 0, 0, 0);
-		for (PathPlot plot : plots) {
+		for (Plot plot : plots) {
 			plot.onDraw(canvas, pressure, x, y, angle, velocity);
 			dirtyRect.union(plot.dirtyRect);
 		}

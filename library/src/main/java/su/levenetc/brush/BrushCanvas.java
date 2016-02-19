@@ -14,8 +14,8 @@ import android.view.ViewTreeObserver;
  */
 public class BrushCanvas extends View {
 
-//	private Brush brush = new LargeBrush(getContext());
-	private Brush brush = new TinyBrush(getContext());
+	private Brush brush = new LargeBrush(getContext());
+//	private Brush brush = new TinyBrush(getContext());
 	private BrushController brushController = new BrushController(brush);
 	private Bitmap bufferBitmap;
 	private Canvas bufferCanvas;
