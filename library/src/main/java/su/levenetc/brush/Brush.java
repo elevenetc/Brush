@@ -76,4 +76,13 @@ public abstract class Brush {
 	public void setAngle(float angle) {
 		this.angle = angle;
 	}
+
+	public void reset() {
+		x = 0;
+		y = 0;
+		pressure = 1f;
+		velocity = 0;
+		angle = 0;
+		for (Plot plot : plots) plot.reset();
+	}
 }

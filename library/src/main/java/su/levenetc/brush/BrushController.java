@@ -15,13 +15,11 @@ import su.levenetc.brush.utils.Last3;
 /**
  * Created by eleven on 10/11/2015.
  */
-public class BrushController {
+public class BrushController implements IBrushController {
 
 	private Brush brush;
 	private BrushCanvas brushCanvas;
 	private boolean isStarted;
-	private int halfHeight;
-	private float path;
 	private PathMeasure pathMeasure;
 	private float SEGMENTS_AMOUNT = 300;
 	private float segment;
@@ -34,6 +32,21 @@ public class BrushController {
 		this.brush = brush;
 	}
 
+	@Override public Brush getBrush() {
+		return brush;
+	}
+
+	@Override public void restart() {
+		//isStarted = false;
+		angle = 0;
+		step = 0;
+		pressure = 0;
+		brush.reset();
+		brushCanvas.reset();
+		brushCanvas.invalidate();
+		start();
+	}
+
 	public void setBrushCanvas(BrushCanvas brushCanvas) {
 		this.brushCanvas = brushCanvas;
 	}
@@ -42,22 +55,14 @@ public class BrushController {
 		return isStarted;
 	}
 
-
-
-	public void start(Context context) {
-
+	public void start() {
 
 		int centerX = brushCanvas.getWidth() / 2;
 		int centerY = brushCanvas.getHeight() / 2;
 		brush.setX(centerX);
 		brush.setY(centerY);
 
-
-		halfHeight = centerY;
-		path = halfHeight * 0.7f;
-
-
-		Path p = getCircle(centerX, centerY, context);
+		Path p = getCircle(centerX, centerY, brushCanvas.getContext());
 //		Path p = getOval(centerX, centerY);
 //		Path p = getLine(centerX, centerY);
 //		Path p = getSin(0, centerY);
@@ -68,7 +73,6 @@ public class BrushController {
 		initAnimator();
 
 		isStarted = true;
-//		brushCanvas.invalidate();
 	}
 
 	private Path getSin(float centerX, float centerY) {
@@ -113,7 +117,6 @@ public class BrushController {
 		animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 			@Override public void onAnimationUpdate(ValueAnimator animation) {
 				step = (int) animation.getAnimatedValue();
-
 				if (updateStep()) brushCanvas.invalidate();
 			}
 		});

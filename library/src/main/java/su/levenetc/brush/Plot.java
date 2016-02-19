@@ -33,6 +33,11 @@ public abstract class Plot {
 		paint.setDither(true);
 	}
 
+	public void reset() {
+		prevX = 0;
+		prevY = 0;
+	}
+
 	public void setColor(int color) {
 		paint.setColor(color);
 	}
@@ -64,7 +69,7 @@ public abstract class Plot {
 		return x + dx * angleDiffX;
 	}
 
-	protected void handleAlpha(float pressure){
+	protected void handleAlpha(float pressure) {
 		paint.setAlpha((int) (255 * pressure * alphaFactor));
 	}
 

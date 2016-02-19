@@ -14,9 +14,7 @@ import android.view.ViewTreeObserver;
  */
 public class BrushCanvas extends View {
 
-	private Brush brush = new LargeBrush(getContext());
-//	private Brush brush = new TinyBrush(getContext());
-	private BrushController brushController = new BrushController(brush);
+	private IBrushController brushController;
 	private Bitmap bufferBitmap;
 	private Canvas bufferCanvas;
 	private Paint paint = new Paint();
@@ -24,17 +22,16 @@ public class BrushCanvas extends View {
 
 	public BrushCanvas(Context context) {
 		super(context);
-		config();
 	}
 
 	public BrushCanvas(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		config();
 	}
 
-	private void config() {
+	public void setController(IBrushController brushController) {
 
-		brushController.setBrushCanvas(BrushCanvas.this);
+		this.brushController = brushController;
+		brushController.setBrushCanvas(this);
 
 		getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 			@Override public void onGlobalLayout() {
@@ -44,18 +41,24 @@ public class BrushCanvas extends View {
 					@Override public void run() {
 						bufferBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
 						bufferCanvas = new Canvas(bufferBitmap);
-						brushController.start(getContext());
+						BrushCanvas.this.brushController.start();
 					}
 				}, 500);
 			}
 		});
 	}
 
+	public void reset() {
+		bufferBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+		bufferCanvas = new Canvas(bufferBitmap);
+	}
+
 	@Override protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
-		if (brushController.isStarted()) {
+		if (brushController != null && brushController.isStarted()) {
 			brushController.update();
+			Brush brush = brushController.getBrush();
 			brush.onDraw(bufferCanvas);
 
 			if (Config.USE_DIRTY) {

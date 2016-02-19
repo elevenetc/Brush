@@ -4,8 +4,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 
 /**
  * Created by eleven on 10/11/2015.
@@ -24,6 +22,11 @@ public class PathPlot extends Plot {
 		paint.setStrokeJoin(Paint.Join.ROUND);
 		paint.setStrokeCap(Paint.Cap.ROUND);
 		paint.setStrokeWidth(baseRadius * sizeFactor);
+	}
+
+	@Override public void reset() {
+		super.reset();
+		path.reset();
 	}
 
 	@Override protected void handleSize(float pressure) {
