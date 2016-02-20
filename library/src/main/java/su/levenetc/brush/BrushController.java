@@ -62,10 +62,10 @@ public class BrushController implements IBrushController {
 		brush.setX(centerX);
 		brush.setY(centerY);
 
-		Path p = getCircle(centerX, centerY, brushCanvas.getContext());
+//		Path p = getCircle(centerX, centerY, brushCanvas.getContext());
 //		Path p = getOval(centerX, centerY);
 //		Path p = getLine(centerX, centerY);
-//		Path p = getSin(0, centerY);
+		Path p = getSin(0, centerY);
 
 		pathMeasure = new PathMeasure(p, false);
 		segment = pathMeasure.getLength() / SEGMENTS_AMOUNT;

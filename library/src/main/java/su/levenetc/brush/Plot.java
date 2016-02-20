@@ -74,6 +74,7 @@ public abstract class Plot {
 	}
 
 	public void onDraw(Canvas canvas, float pressure, float x, float y, float angle, float velocity) {
+
 		handleAlpha(pressure);
 		handleSize(pressure);
 

@@ -9,7 +9,7 @@ import su.levenetc.brush.Brush;
 import su.levenetc.brush.BrushCanvas;
 import su.levenetc.brush.BrushController;
 import su.levenetc.brush.IBrushController;
-import su.levenetc.brush.LargeBrush;
+import su.levenetc.brush.UnitBrush;
 
 public class SampleActivity extends Activity {
 
@@ -30,7 +30,8 @@ public class SampleActivity extends Activity {
 	}
 
 	@NonNull private Brush initBrush() {
-		//	private Brush brush = new TinyBrush(getContext());
-		return new LargeBrush(this);
+//		return new TinyBrush(this);
+//		return new LargeBrush(this);
+		return new UnitBrush(this);
 	}
 }

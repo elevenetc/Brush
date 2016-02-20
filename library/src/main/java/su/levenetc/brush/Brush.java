@@ -29,6 +29,7 @@ public abstract class Brush {
 
 		dirtyRect.set(0, 0, 0, 0);
 		for (Plot plot : plots) {
+			if (plot == null) continue;
 			plot.onDraw(canvas, pressure, x, y, angle, velocity);
 			dirtyRect.union(plot.dirtyRect);
 		}
@@ -83,6 +84,9 @@ public abstract class Brush {
 		pressure = 1f;
 		velocity = 0;
 		angle = 0;
-		for (Plot plot : plots) plot.reset();
+		for (Plot plot : plots) {
+			if (plot == null) continue;
+			plot.reset();
+		}
 	}
 }
