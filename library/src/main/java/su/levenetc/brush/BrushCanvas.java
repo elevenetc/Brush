@@ -31,7 +31,6 @@ public class BrushCanvas extends View {
 	public void setController(IBrushController brushController) {
 
 		this.brushController = brushController;
-		brushController.setBrushCanvas(this);
 
 		getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 			@Override public void onGlobalLayout() {
@@ -57,7 +56,7 @@ public class BrushCanvas extends View {
 		super.onDraw(canvas);
 
 		if (brushController != null && brushController.isStarted()) {
-			brushController.update();
+			
 			Brush brush = brushController.getBrush();
 			brush.onDraw(bufferCanvas);
 

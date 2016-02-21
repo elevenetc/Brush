@@ -13,7 +13,7 @@ public interface IBrushController {
 
 	void setBrushCanvas(BrushCanvas brushCanvas);
 
-	void update();
+	void setShape(BrushShape shape);
 
 	boolean isStarted();
 

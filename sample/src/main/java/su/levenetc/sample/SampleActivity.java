@@ -10,6 +10,9 @@ import su.levenetc.brush.BrushCanvas;
 import su.levenetc.brush.BrushController;
 import su.levenetc.brush.IBrushController;
 import su.levenetc.brush.UnitBrush;
+import su.levenetc.brush.shapes.CircleShape;
+import su.levenetc.brush.shapes.LineShape;
+import su.levenetc.brush.shapes.SinShape;
 
 public class SampleActivity extends Activity {
 
@@ -20,6 +23,12 @@ public class SampleActivity extends Activity {
 		BrushCanvas brushCanvas = (BrushCanvas) findViewById(R.id.brush_canvas);
 
 		final IBrushController brushController = new BrushController(initBrush());
+
+//		brushController.setShape(new CircleShape());
+		brushController.setShape(new LineShape());
+//		brushController.setShape(new SinShape());
+
+		brushController.setBrushCanvas(brushCanvas);
 		brushCanvas.setController(brushController);
 
 		findViewById(R.id.btn_replay).setOnClickListener(new View.OnClickListener() {
