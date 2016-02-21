@@ -12,9 +12,8 @@ public abstract class Brush {
 	private float pressure = 1f;
 	private float x;
 	private float y;
-	private float rotation;
+	private double rotation;
 	private float velocity;
-	private float angle;
 	RectF dirtyRect = new RectF();
 
 	public Brush() {
@@ -27,22 +26,35 @@ public abstract class Brush {
 
 	public void onDraw(Canvas canvas) {
 
-		dirtyRect.set(0, 0, 0, 0);
+		resetDirtyRect();
+
 		for (Plot plot : plots) {
 			if (plot == null) continue;
-			plot.onDraw(canvas, pressure, x, y, angle, velocity);
+			plot.onDraw(canvas, pressure, x, y, velocity);
 			dirtyRect.union(plot.dirtyRect);
 		}
 
-		configDirtyRegion(canvas);
+		updateDirtyRegion(canvas);
 
 		if (Debug.ENABLED) {
 			//canvas.drawLine(x, y, x, y - 100 * velocity, Debug.GREEN_STROKE);
 		}
 
+		if (Config.DRAW_DIRECTION_VECTOR) {
+			double r = rotation + Math.PI / 2;
+			int vecLength = 200;
+			float xD = (float) (vecLength * Math.sin(r)) + x;
+			float yD = (float) (vecLength * Math.cos(r)) + y;
+			canvas.drawLine(x, y, xD, yD, Config.GREEN_STROKE);
+		}
+
 	}
 
-	private void configDirtyRegion(Canvas canvas) {
+	private void resetDirtyRect() {
+		if (Config.USE_DIRTY) dirtyRect.set(0, 0, 0, 0);
+	}
+
+	private void updateDirtyRegion(Canvas canvas) {
 		if (Config.USE_DIRTY) {
 			dirtyRect.union(
 					dirtyRect.left - 50,
@@ -66,7 +78,7 @@ public abstract class Brush {
 		pressure = value;
 	}
 
-	public void setRotation(float rotation) {
+	public void setRotation(double rotation) {
 		this.rotation = rotation;
 	}
 
@@ -74,16 +86,11 @@ public abstract class Brush {
 		this.velocity = velocity;
 	}
 
-	public void setAngle(float angle) {
-		this.angle = angle;
-	}
-
 	public void reset() {
 		x = 0;
 		y = 0;
 		pressure = 1f;
 		velocity = 0;
-		angle = 0;
 		for (Plot plot : plots) {
 			if (plot == null) continue;
 			plot.reset();

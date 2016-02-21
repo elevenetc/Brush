@@ -38,7 +38,7 @@ public class BrushController implements IBrushController {
 	}
 
 	public boolean isStarted() {
-		return shape.isShapeTraversed();
+		return shape.isInTraverse();
 	}
 
 	public void start() {

@@ -73,7 +73,7 @@ public abstract class Plot {
 		paint.setAlpha((int) (255 * pressure * alphaFactor));
 	}
 
-	public void onDraw(Canvas canvas, float pressure, float x, float y, float angle, float velocity) {
+	public void onDraw(Canvas canvas, float pressure, float x, float y, float velocity) {
 
 		handleAlpha(pressure);
 		handleSize(pressure);

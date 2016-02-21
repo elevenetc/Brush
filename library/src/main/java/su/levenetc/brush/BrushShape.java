@@ -4,6 +4,7 @@ import android.graphics.Matrix;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.graphics.PointF;
+import android.support.annotation.NonNull;
 
 import su.levenetc.brush.utils.AverageValueFilter;
 import su.levenetc.brush.utils.Last3;
@@ -26,23 +27,22 @@ public abstract class BrushShape {
 	private float step = 0;
 	private float velocity;
 	private float lastDistance;
-	private float rotation;
+	private double rotation;
 	private float pressure = 0;
 	private float timeDiff;
 	private float distDiff;
-	private boolean isStarted;
+	private boolean isInTraverse;
 	private long lastTime;
-	private double angle;
 	float[] v = new float[9];
 
-	protected abstract Path createPath(float canvasWidth, float canvasHeight);
+	protected abstract @NonNull Path createPath(float canvasWidth, float canvasHeight);
 
 	public void setBrush(Brush brush) {
 		this.brush = brush;
 	}
 
 	public void init(float canvasWidth, float canvasHeight) {
-		isStarted = true;
+		isInTraverse = true;
 		path = createPath(canvasWidth, canvasHeight);
 		pathMeasure = new PathMeasure(path, false);
 		segment = pathMeasure.getLength() / SEGMENTS_AMOUNT;
@@ -55,20 +55,18 @@ public abstract class BrushShape {
 	public boolean updateStep(int step) {
 		this.step = step;
 
-		if (step > SEGMENTS_AMOUNT) {
-			isStarted = false;
-		}
+		if (step > SEGMENTS_AMOUNT) isInTraverse = false;
 
 		pressure = computePressure();
 		final float distance = segment * step;
 		pathMeasure.getPosTan(distance, coordinates, null);
 		pathMeasure.getMatrix(distance, matrix, PathMeasure.TANGENT_MATRIX_FLAG);
 
-
 		matrix.getValues(v);
 
-		calcAngle(distance);
-
+		float scaleX = v[Matrix.MSCALE_X];
+		double rot = Math.atan2(v[Matrix.MSKEW_X], scaleX);
+		if (rot != rotation) rotation = rot;
 
 		if (lastTime != 0) timeDiff = System.currentTimeMillis() - lastTime;
 		if (lastDistance != 0) distDiff = distance - lastDistance;
@@ -91,14 +89,6 @@ public abstract class BrushShape {
 		brush.setY(coordinates[1]);
 		brush.setRotation(rotation);
 		brush.setVelocity(velocity);
-		brush.setAngle((float) angle);
-	}
-
-	private void calcAngle(float distance) {
-		if (lastDistance != distance) {
-			last3.put(coordinates[0], coordinates[1]);
-			angle = last3.getAngle();
-		}
 	}
 
 	private float computePressure() {
@@ -106,14 +96,13 @@ public abstract class BrushShape {
 		double s = (step / segments) * (Math.PI * 2);
 		return (float) (Math.cos(s + Math.PI) + 1) / 2f;
 	}
-	
-	public boolean isShapeTraversed() {
-		return isStarted;
+
+	public boolean isInTraverse() {
+		return isInTraverse;
 	}
 
 	public void reset() {
-		isStarted = false;
-		angle = 0;
+		isInTraverse = false;
 		step = 0;
 		pressure = 0;
 	}

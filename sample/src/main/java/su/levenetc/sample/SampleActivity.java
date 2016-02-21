@@ -11,7 +11,7 @@ import su.levenetc.brush.BrushController;
 import su.levenetc.brush.IBrushController;
 import su.levenetc.brush.UnitBrush;
 import su.levenetc.brush.shapes.CircleShape;
-import su.levenetc.brush.shapes.LineShape;
+import su.levenetc.brush.shapes.FillSquareShape;
 import su.levenetc.brush.shapes.SinShape;
 
 public class SampleActivity extends Activity {
@@ -25,8 +25,9 @@ public class SampleActivity extends Activity {
 		final IBrushController brushController = new BrushController(initBrush());
 
 //		brushController.setShape(new CircleShape());
-		brushController.setShape(new LineShape());
-//		brushController.setShape(new SinShape());
+//		brushController.setShape(new LineShape());
+		brushController.setShape(new SinShape());
+//		brushController.setShape(new FillSquareShape());
 
 		brushController.setBrushCanvas(brushCanvas);
 		brushCanvas.setController(brushController);
