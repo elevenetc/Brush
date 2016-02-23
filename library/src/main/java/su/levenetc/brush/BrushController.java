@@ -13,7 +13,11 @@ public class BrushController implements IBrushController {
 	private BrushShape shape;
 	private int duration = 2000;
 
-	public BrushController(Brush brush) {
+	public BrushController() {
+
+	}
+
+	@Override public void setBrush(Brush brush) {
 		this.brush = brush;
 	}
 

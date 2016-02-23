@@ -19,8 +19,8 @@ public class TinyBrush extends Brush {
 
 		Plot[] plots = new Plot[3];
 		plots[0] = new PathPlot(sizeFactor, 0, 0, baseRadius);
-		plots[1] = new PathPlot(sizeFactor / 2f, -max, 0, baseRadius);
-		plots[2] = new PathPlot(sizeFactor / 2f, max, 0, baseRadius);
+		plots[1] = new PathPlot(sizeFactor / 2f, 0, -max, baseRadius);
+		plots[2] = new PathPlot(sizeFactor / 2f, 0, max, baseRadius);
 //		plots[0] = new LinePlot(sizeFactor, 0, 0, baseRadius);
 //		plots[1] = new LinePlot(sizeFactor / 2f, -max, 0, baseRadius);
 //		plots[2] = new LinePlot(sizeFactor / 2f, max, 0, baseRadius);
@@ -29,5 +29,7 @@ public class TinyBrush extends Brush {
 		plots[1].setColor(Color.BLUE);
 		plots[2].setColor(Color.GREEN);
 		setPlots(plots);
+
+		setMaxRadius(max);
 	}
 }

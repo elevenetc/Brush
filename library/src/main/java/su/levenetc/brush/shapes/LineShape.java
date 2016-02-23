@@ -17,7 +17,7 @@ public class LineShape extends BrushShape {
 		startPoint = new PointF(canvasWidth / 2, canvasHeight / 2);
 
 		path.moveTo(startPoint.x, startPoint.y);
-		path.lineTo(startPoint.x, startPoint.y + 300);
+		path.lineTo(startPoint.x + 300, startPoint.y);
 
 		return path;
 	}

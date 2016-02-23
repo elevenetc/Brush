@@ -15,9 +15,18 @@ public abstract class Brush {
 	private double rotation;
 	private float velocity;
 	RectF dirtyRect = new RectF();
+	private float maxRadius;
 
 	public Brush() {
 
+	}
+
+	protected void setMaxRadius(float maxRadius) {
+		this.maxRadius = maxRadius;
+	}
+
+	float getMaxRadius() {
+		return maxRadius;
 	}
 
 	protected void setPlots(Plot[] plots) {
@@ -30,7 +39,7 @@ public abstract class Brush {
 
 		for (Plot plot : plots) {
 			if (plot == null) continue;
-			plot.onDraw(canvas, pressure, x, y, velocity);
+			plot.onDraw(canvas, this, pressure, x, y, velocity);
 			dirtyRect.union(plot.dirtyRect);
 		}
 

@@ -7,6 +7,8 @@ import android.content.Context;
  */
 public interface IBrushController {
 
+	void setBrush(Brush brush);
+
 	Brush getBrush();
 
 	void restart();
